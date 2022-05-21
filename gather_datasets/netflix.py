@@ -22,7 +22,7 @@ class Netflix:
         extract_file_with_progress(inner_tar_path, netflix_data_dir)
 
     @staticmethod
-    def process_dataset(data_dir, destination_dir):
+    def process_dataset(data_dir, destination_dir, compress=True):
         print('Processing Netflix dataset...')
         netflix_data_dir = path.join(data_dir, 'netflix')
         ratings_files = get_files(path.join(netflix_data_dir, 'training_set'))
@@ -69,4 +69,4 @@ class Netflix:
 
         movies_titles_df.sort_values(by=['item_id'], inplace=True)
         movies_titles_df.reset_index(drop=True)
-        save_dataset(movies_titles_df, destination_dir, 'movies')
+        save_dataset(movies_titles_df, destination_dir, 'movies', compress)

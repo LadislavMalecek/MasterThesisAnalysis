@@ -12,7 +12,7 @@ class KGRec:
         download_file_and_unzip(url, data_dir + '/kgrec', 'KGRec-dataset.zip')
 
     @staticmethod
-    def process_dataset(data_dir, destination_dir):
+    def process_dataset(data_dir, destination_dir, compress=True):
         for dataset in ['music', 'sound']:
             dataset_dir = path.join(data_dir, 'kgrec', 'KGRec-dataset', f'KGRec-{dataset}')
             ratings_file = 'implicit_lf_dataset.csv' if dataset == 'music' else 'downloads_fs_dataset.txt'
@@ -21,7 +21,7 @@ class KGRec:
                                      names=['user_id', 'item_id', 'rating'])
             ratings_df.drop(columns=['rating'], inplace=True)
             ratings_df.sort_values(by=['user_id', 'item_id'], inplace=True)
-            save_dataset(ratings_df, destination_dir, f'{dataset}_ratings')
+            save_dataset(ratings_df, destination_dir, f'{dataset}_ratings', compress)
 
             for other_data_file, column_name in [('descriptions', 'description'), ('tags', 'tag')]:
                 data = []
@@ -37,4 +37,4 @@ class KGRec:
                 df = pd.DataFrame(data=data, columns=['item_id', column_name])
                 df.sort_values('item_id', inplace=True)
                 df.reset_index(drop=True)
-                save_dataset(df, destination_dir, f'{dataset}_{column_name}')
+                save_dataset(df, destination_dir, f'{dataset}_{column_name}', compress)

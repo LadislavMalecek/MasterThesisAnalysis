@@ -74,12 +74,17 @@ def download_file_and_unzip(url, data_dir, file_name):
 
 def save_dataset(dataset_to_save, destination_dir, dataset_name, compress=True, can_take_long=False):
     create_directory(destination_dir)
+
+    destination_file = path.join(destination_dir, dataset_name + '.csv')
+    if compress:
+        destination_file += '.gz'
+
     if can_take_long:
-        print(f'Saving {dataset_name} dataset, can take a long time...')
+        print(f'Saving {dataset_name} dataset to {destination_file}, can take a long time...')
     else:
-        print(f'Saving {dataset_name} dataset...')
+        print(f'Saving {dataset_name} dataset to {destination_file}...')
 
     if compress:
-        dataset_to_save.to_csv(path.join(destination_dir, dataset_name + '.csv.gz'), index=False, header=True, compression='gzip')
+        dataset_to_save.to_csv(destination_file, index=False, header=True, compression='gzip')
     else:
-        dataset_to_save.to_csv(path.join(destination_dir, dataset_name + '.csv'), index=False, header=True)
+        dataset_to_save.to_csv(destination_file, index=False, header=True)
