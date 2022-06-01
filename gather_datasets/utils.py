@@ -3,6 +3,7 @@ import os
 import tarfile
 from zipfile import ZipFile
 import requests
+import hashlib
 
 from tqdm import tqdm
 
@@ -30,6 +31,31 @@ def download_file_with_progress(url, file_path):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     pbar.update(len(chunk))
+
+
+def get_md5_hash(file_path):
+    print('Calculating md5 hash...')
+    md5 = hashlib.md5()
+    with open(file_path, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            md5.update(chunk)
+    return md5.hexdigest()
+
+
+def check_if_file_exists(file_path, md5_hash=None):
+    if not path.isfile(file_path):
+        return False
+    if md5_hash is None:
+        return True
+    return md5_hash == get_md5_hash(file_path)
+
+def check_if_file_valid(file_path, md5_hash):
+    if not path.isfile(file_path):
+        return (False, f'File {file_path} does not exist')
+    hash_matches = md5_hash == get_md5_hash(file_path)
+    if not hash_matches:
+        return (False, f'File invalid, {file_path} hash does not match')
+    return (True, 'File is valid')
 
 
 def extract_file_with_progress(file_path, directory_path):
