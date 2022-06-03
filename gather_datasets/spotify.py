@@ -8,7 +8,7 @@ from utils import check_if_file_valid, check_if_file_exists, extract_file_with_p
 
 class Spotify:
 
-    DATASET_MD5 = 'a7f47d6744195e421ee8d43a820963b2'
+    DATASET_MD5 = 'a7f47d6744195e421ee8d43a820963b1'
 
     @staticmethod
     def download_dataset(data_dir):
@@ -36,7 +36,7 @@ class Spotify:
         # dataset is comprised of lots of json files that contain each many playlists
         # we need to merge them into a single csv file
         print('Processing Spotify dataset...')
-        TrackInfo = namedtuple('TrackInfo', ['track_id', 'track_uri', 'track_name', 'artist_uri', 'artist_name', 'album_uri'])
+        TrackInfo = namedtuple('TrackInfo', ['item_id', 'item_uri', 'item_name', 'artist_uri', 'artist_name', 'album_uri'])
 
         tracks = {}
         playlists = []
@@ -57,20 +57,20 @@ class Spotify:
                     for track in tracks_data:
                         track_uri = track['track_uri']
                         
-                        id = None
+                        track_id = None
                         if track_uri in tracks:
-                            id = tracks[track_uri].track_id
+                            track_id = tracks[track_uri].item_id
                         else:
-                            id = next_id
+                            track_id = next_id
                             next_id += 1
-                            tracks[track_uri] = TrackInfo(id, track_uri, track['track_name'], track['artist_uri'], track['artist_name'], track['album_uri'])
-                        playlists.append((pid, id))
+                            tracks[track_uri] = TrackInfo(track_id, track_uri, track['track_name'], track['artist_uri'], track['artist_name'], track['album_uri'])
+                        playlists.append((pid, track_id))
             pbar.update(1)
+        pbar.close()
 
         print('Transforming Spotify dataset...')
         tracks_df = pd.DataFrame.from_records(list(tracks.values()), columns=TrackInfo._fields)
         tracks_df.reset_index(inplace=True, drop=True)
-        tracks_df.set_index('track_id', inplace=True)
         save_dataset(tracks_df, destination_dir, 'tracks', compress)
-        ratings_df = pd.DataFrame.from_records(playlists, columns=['pid', 'track_uri'])
+        ratings_df = pd.DataFrame.from_records(playlists, columns=['playlist_id', 'item_id'])
         save_dataset(ratings_df, destination_dir, 'ratings', compress)
