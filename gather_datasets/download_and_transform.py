@@ -20,7 +20,8 @@ DESCRIPTION = 'Program to download and process common recommendation systems dat
 DATASET_PROCESSORS = {
     'movie_lens': MovieLens,
     'netflix': Netflix,
-    'kgrec': KGRec
+    'kgrec': KGRec,
+    'spotify': Spotify,
 }
 
 
