@@ -1,10 +1,10 @@
 from os import path
 
-from lastfm import LastFM
-from kgrec import KGRec
-from movie_lens import MovieLens
-from netflix import Netflix
-from spotify import Spotify
+from datasets.lastfm import LastFM
+from datasets.kgrec import KGRec
+from datasets.movie_lens import MovieLens
+from datasets.netflix import Netflix
+from datasets.spotify import Spotify
 
 from utils import create_directory
 import argparse
@@ -37,7 +37,6 @@ def parse_args():
     args = parser.parse_args()
 
     datasets = args.datasets.split(sep=',')
-    print(datasets)
 
     # check if 'all' present, if so, replace with all available datasets
     if 'all' in datasets:
@@ -65,15 +64,16 @@ if __name__ == '__main__':
     create_directory(download_data_dir)
 
     for dataset in args.datasets:
-        print(f'─────────── Download {dataset} dataset ───────────')
+        print(f'┌─────────── ⚙️  Downloading {dataset} dataset ───────────')
         dataset_processor = DATASET_PROCESSORS[dataset]
         dataset_processor.download_dataset(download_data_dir)
         if args.download_only:
             exit()
 
-        print(f'─────────── Transform {dataset} dataset ───────────')
+        print(f'├─────────── ⚙️  Transforming {dataset} dataset')
         dataset_processor.process_dataset(
             data_dir=download_data_dir,
             destination_dir=path.join(args.data_dir, dataset),
             compress=args.compress
         )
+        print(f'└─────────── ✅ Finished processing {dataset} dataset ───────────')
