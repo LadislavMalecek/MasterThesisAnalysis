@@ -1,5 +1,6 @@
 from os import path
 
+from lastfm import LastFM
 from kgrec import KGRec
 from movie_lens import MovieLens
 from netflix import Netflix
@@ -22,6 +23,7 @@ DATASET_PROCESSORS = {
     'netflix': Netflix,
     'kgrec': KGRec,
     'spotify': Spotify,
+    'lastfm': LastFM,
 }
 
 

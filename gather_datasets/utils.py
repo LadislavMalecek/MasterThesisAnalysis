@@ -1,3 +1,5 @@
+from collections import defaultdict
+import collections
 from os import path
 import os
 import tarfile
@@ -114,3 +116,18 @@ def save_dataset(dataset_to_save, destination_dir, dataset_name, compress=True, 
         dataset_to_save.to_csv(destination_file, index=False, header=True, compression='gzip')
     else:
         dataset_to_save.to_csv(destination_file, index=False, header=True)
+
+
+class IdMap(dict):
+    def __init__(self, *args, **kwargs):
+        self._original_to_int_id_map = {}
+        self._last_id = -1
+        
+    def _get_next_id_value(self):
+        self._last_id += 1
+        return self._last_id
+
+    def map(self, key):
+        if key not in self._original_to_int_id_map:
+            self._original_to_int_id_map[key] = self._get_next_id_value()
+        return self._original_to_int_id_map[key]
