@@ -2,13 +2,13 @@ from os import path
 
 import pandas as pd
 from tqdm import tqdm
+from dataset import Dataset
 
 from utils import create_directory, download_file_with_progress, extract_file_with_progress, get_files, save_dataset
 
 
-class Netflix:
-    @staticmethod
-    def download_dataset(data_dir):
+class Netflix(Dataset):
+    def download_dataset(self, data_dir):
         print('Downloading Netflix dataset...')
         url = 'https://archive.org/download/nf_prize_dataset.tar/nf_prize_dataset.tar.gz'
         file_name = 'nf_prize_dataset.tar.gz'
@@ -21,8 +21,7 @@ class Netflix:
         extract_file_with_progress(file_path, netflix_data_dir)
         extract_file_with_progress(inner_tar_path, netflix_data_dir)
 
-    @staticmethod
-    def process_dataset(data_dir, destination_dir, compress=True):
+    def process_dataset(self, data_dir, destination_dir, compress=True):
         print('Processing Netflix dataset...')
         netflix_data_dir = path.join(data_dir, 'netflix')
         ratings_files = get_files(path.join(netflix_data_dir, 'training_set'))

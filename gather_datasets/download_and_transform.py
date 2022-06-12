@@ -21,9 +21,9 @@ DESCRIPTION = 'Program to download and process common recommendation systems dat
 DATASET_PROCESSORS = {
     'movie_lens': MovieLens,
     'netflix': Netflix,
+    'lastfm': LastFM,
     'kgrec': KGRec,
     'spotify': Spotify,
-    'lastfm': LastFM,
 }
 
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     for dataset in args.datasets:
         print(f'┌─────────── ⚙️  Downloading {dataset} dataset ───────────')
-        dataset_processor = DATASET_PROCESSORS[dataset]
+        dataset_processor = DATASET_PROCESSORS[dataset]()
         dataset_processor.download_dataset(download_data_dir)
         if args.download_only:
             exit()

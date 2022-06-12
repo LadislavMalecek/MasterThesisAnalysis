@@ -1,18 +1,17 @@
 from os import path
 
 import pandas as pd
+from dataset import Dataset
 from utils import download_file_and_unzip, get_files, save_dataset
 
 
-class KGRec:
-    @staticmethod
-    def download_dataset(data_dir):
+class KGRec(Dataset):
+    def download_dataset(self, data_dir):
         print('Downloading GFar dataset...')
         url = 'http://mtg.upf.edu/system/files/projectsweb/KGRec-dataset.zip'
         download_file_and_unzip(url, data_dir + '/kgrec', 'KGRec-dataset.zip')
 
-    @staticmethod
-    def process_dataset(data_dir, destination_dir, compress=True):
+    def process_dataset(self, data_dir, destination_dir, compress=True):
         for dataset in ['music', 'sound']:
             dataset_dir = path.join(
                 data_dir, 'kgrec', 'KGRec-dataset', f'KGRec-{dataset}')

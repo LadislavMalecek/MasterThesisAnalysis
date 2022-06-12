@@ -4,14 +4,14 @@ from os import path
 
 import pandas as pd
 from tqdm import tqdm
-from utils import check_if_file_valid, check_if_file_exists, extract_file_with_progress, get_files, save_dataset
+from dataset import Dataset
+from utils import check_if_file_valid, get_files, save_dataset
 
-class Spotify:
+class Spotify(Dataset):
 
     DATASET_MD5 = 'a7f47d6744195e421ee8d43a820963b1'
 
-    @staticmethod
-    def download_dataset(data_dir):
+    def download_dataset(self, data_dir):
         file_path = path.join(data_dir, 'spotify', 'spotify_million_playlist_dataset.zip')
 
         file_ok = False
@@ -31,8 +31,7 @@ class Spotify:
 
         # extract_file_with_progress(file_path, data_dir + '/spotify')
 
-    @staticmethod
-    def process_dataset(data_dir, destination_dir, compress=True):
+    def process_dataset(self, data_dir, destination_dir, compress=True):
         # dataset is comprised of lots of json files that contain each many playlists
         # we need to merge them into a single csv file
         print('Processing Spotify dataset...')

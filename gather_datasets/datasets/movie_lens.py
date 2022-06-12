@@ -1,16 +1,15 @@
 import pandas as pd
+from dataset import Dataset
 from utils import download_file_and_unzip, save_dataset
 
 
-class MovieLens:
-    @staticmethod
-    def download_dataset(data_dir):
+class MovieLens(Dataset):
+    def download_dataset(self, data_dir):
         print('Downloading MovieLens dataset...')
         url = 'http://files.grouplens.org/datasets/movielens/ml-25m.zip'
         download_file_and_unzip(url, data_dir + '/movie_lens', 'ml-25m.zip')
 
-    @staticmethod
-    def process_dataset(data_dir, destination_dir, compress=True):
+    def process_dataset(self, data_dir, destination_dir, compress=True):
         print('Processing MovieLens dataset...')
 
         print('Transforming ratings.csv...')
