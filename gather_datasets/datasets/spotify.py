@@ -5,6 +5,7 @@ from os import path
 import pandas as pd
 from tqdm import tqdm
 from dataset import Dataset
+from utils import extract_file_with_progress
 from utils import check_if_file_valid, get_files, save_dataset
 
 class Spotify(Dataset):
@@ -29,7 +30,7 @@ class Spotify(Dataset):
             if user_input == 'exit':
                 return False
 
-        # extract_file_with_progress(file_path, data_dir + '/spotify')
+        extract_file_with_progress(file_path, data_dir + '/spotify')
 
     def process_dataset(self, data_dir, destination_dir, compress=True):
         # dataset is comprised of lots of json files that contain each many playlists
