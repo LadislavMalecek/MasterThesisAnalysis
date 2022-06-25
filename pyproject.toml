@@ -5,15 +5,19 @@ description = ""
 authors = ["Ladislav Malecek <malecek.ladislav@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-pandas = "^1.4.2"
-matplotlib = "^3.5.2"
-numpy = "^1.22.3"
-ipykernel = "^6.13.0"
-requests = "^2.27.1"
-tqdm = "^4.64.0"
+python = ">=3.9,<3.11"
+pandas = "^1.4"
+matplotlib = "^3.5"
+numpy = "^1.22"
+ipykernel = "^6.13"
+requests = "^2.27"
+tqdm = "^4.64"
+seaborn = "^0.11"
+scipy = "^1.8.0"
+
 
 [tool.poetry.dev-dependencies]
+notebook = "^6.4.11"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
