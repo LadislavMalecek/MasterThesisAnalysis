@@ -5,7 +5,7 @@ description = ""
 authors = ["Ladislav Malecek <malecek.ladislav@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.11"
+python = "=3.9.13"
 pandas = "^1.4"
 matplotlib = "^3.5"
 numpy = "^1.22"
@@ -14,10 +14,13 @@ requests = "^2.27"
 tqdm = "^4.64"
 seaborn = "^0.11"
 scipy = "^1.8.0"
+ray = "^1.13.0"
+more-itertools = "^8.13.0"
 
 
 [tool.poetry.dev-dependencies]
 notebook = "^6.4.11"
+jupyter = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
