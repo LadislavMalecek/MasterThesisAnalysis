@@ -72,5 +72,5 @@ class Spotify(Dataset):
         tracks_df = pd.DataFrame.from_records(list(tracks.values()), columns=TrackInfo._fields)
         tracks_df.reset_index(inplace=True, drop=True)
         save_dataset(tracks_df, destination_dir, 'tracks', compress)
-        ratings_df = pd.DataFrame.from_records(playlists, columns=['playlist_id', 'item_id'])
+        ratings_df = pd.DataFrame.from_records(playlists, columns=['user_id', 'item_id'])
         save_dataset(ratings_df, destination_dir, 'ratings', compress)

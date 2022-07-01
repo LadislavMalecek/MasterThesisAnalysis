@@ -4,7 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 from dataset import Dataset
 
-from utils import create_directory, download_file_with_progress, extract_file_with_progress, get_files, save_dataset
+from utils import create_directory, download_file_with_progress, extract_file_with_progress, get_files, save_dataset, IdMap
 
 
 class Netflix(Dataset):
@@ -47,10 +47,17 @@ class Netflix(Dataset):
             pbar.update(1)
         pbar.close()
 
+        user_id_map = IdMap()
+        item_id_map = IdMap()
+
         print('Concatenating all dataframes...')
         ratings_df = pd.concat(all_dataframes)
         ratings_df.sort_values(by=['user_id', 'item_id'], inplace=True)
         ratings_df.reset_index(drop=True)
+
+        ratings_df['user_id'] = ratings_df['user_id'].map(user_id_map.map)
+        ratings_df['item_id'] = ratings_df['item_id'].map(item_id_map.map)
+
         save_dataset(ratings_df, destination_dir, 'ratings', can_take_long=True)
 
         print('Transforming movies_titles.txt...')
@@ -67,5 +74,6 @@ class Netflix(Dataset):
         )
 
         movies_titles_df.sort_values(by=['item_id'], inplace=True)
+        movies_titles_df['item_id'] = movies_titles_df['item_id'].map(item_id_map.map)
         movies_titles_df.reset_index(drop=True)
         save_dataset(movies_titles_df, destination_dir, 'movies', compress)

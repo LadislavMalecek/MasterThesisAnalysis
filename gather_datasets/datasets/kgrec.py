@@ -2,7 +2,7 @@ from os import path
 
 import pandas as pd
 from dataset import Dataset
-from utils import download_file_and_unzip, get_files, save_dataset
+from utils import download_file_and_unzip, get_files, save_dataset, IdMap
 
 
 class KGRec(Dataset):
@@ -16,12 +16,17 @@ class KGRec(Dataset):
             dataset_dir = path.join(
                 data_dir, 'kgrec', 'KGRec-dataset', f'KGRec-{dataset}')
 
+            user_id_map = IdMap()
+            item_id_map = IdMap()
+
             # Load ratings, remove the rating column which is always 1
             ratings_file = 'implicit_lf_dataset.csv' if dataset == 'music' else 'downloads_fs_dataset.txt'
             print(f'Processing KGRec-{dataset} dataset...')
             ratings_df = pd.read_csv(path.join(dataset_dir, ratings_file), sep='\t', header=None, names=['user_id', 'item_id', 'rating'])
             ratings_df.drop(columns=['rating'], inplace=True)
             ratings_df.sort_values(by=['user_id', 'item_id'], inplace=True)
+            ratings_df['user_id'] = ratings_df['user_id'].map(user_id_map.map)
+            ratings_df['item_id'] = ratings_df['item_id'].map(item_id_map.map)
             save_dataset(ratings_df, destination_dir, f'{dataset}_ratings', compress)
 
             # Load descriptions and tags files, relpace nonstandard quotes with standard ones and join them together
@@ -43,7 +48,10 @@ class KGRec(Dataset):
                     df = df.explode('tag_n')
                     df.drop(columns=['tag'], inplace=True)
                     df.rename(columns={'tag_n': 'tag'}, inplace=True)
+
                 df.sort_values('item_id', inplace=True)
+                df['item_id'] = df['item_id'].map(item_id_map.map)
+
                 df.reset_index(drop=True)
                 save_dataset(df, destination_dir,
                              f'{dataset}_{column_name}s', compress)
