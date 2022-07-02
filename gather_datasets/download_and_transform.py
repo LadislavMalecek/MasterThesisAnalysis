@@ -2,9 +2,10 @@ from os import path
 
 from datasets.lastfm import LastFM
 from datasets.kgrec import KGRec
-from datasets.movie_lens import MovieLens
+from datasets.movie_lens import MovieLens, MovieLensSize
 from datasets.netflix import Netflix
 from datasets.spotify import Spotify
+from datasets.movie_lens import MovieLensSize
 
 from utils import create_directory
 import argparse
@@ -18,12 +19,14 @@ DESCRIPTION = 'Program to download and process common recommendation systems dat
     ' It downloads the datasets from the original sources and therefore does not violate the authors\' licences.' \
     ' After downloading, it transforms the datasets into a format that is easier to process and use for building recommender systems models.'
 
+
 DATASET_PROCESSORS = {
-    'movie_lens': MovieLens,
-    'netflix': Netflix,
-    'lastfm': LastFM,
-    'kgrec': KGRec,
-    'spotify': Spotify,
+    'movie_lens': lambda: MovieLens(),
+    'movie_lens_small': lambda: MovieLens(MovieLensSize.one_million),
+    'netflix': lambda: Netflix(),
+    'lastfm': lambda: LastFM(),
+    'kgrec': lambda: KGRec(),
+    'spotify': lambda: Spotify(),
 }
 
 
