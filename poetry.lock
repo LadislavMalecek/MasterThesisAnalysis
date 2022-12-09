@@ -296,6 +296,19 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "implicit"
+version = "0.6.1"
+description = "Collaborative Filtering for Implicit Feedback Datasets"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = "*"
+scipy = ">=0.16"
+tqdm = ">=4.27"
+
+[[package]]
 name = "ipykernel"
 version = "6.13.1"
 description = "IPython Kernel for Jupyter"
@@ -1293,7 +1306,7 @@ notebook = ">=4.4.1"
 [metadata]
 lock-version = "1.1"
 python-versions = "=3.9.13"
-content-hash = "4e8799a4262f0c844379baac7070b5d800760514714e755f9a09e335fdce8b83"
+content-hash = "bf53df3d2c240f8e3420740931a27ab96157e72cf043c302bb78ac225b008e45"
 
 [metadata.files]
 aiosignal = [
@@ -1586,6 +1599,7 @@ idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
+implicit = []
 ipykernel = [
     {file = "ipykernel-6.13.1-py3-none-any.whl", hash = "sha256:fedc79bebd8a438162d056e0c7662d5ac8a47d1f6ef33a702e8460248dc4517f"},
     {file = "ipykernel-6.13.1.tar.gz", hash = "sha256:6f42070a5d87ecbf4a2fc27a7faae8d690fd3794825a090ddf6b00b9678a5b69"},
