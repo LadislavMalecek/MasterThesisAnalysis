@@ -34,3 +34,18 @@ green "Running matrix factorization for Spotify"
 poetry run python ./matrix_factorization/matrix_factorization.py --rating-type implicit --input ./datasets/spotify/ratings.csv.gz --num-factors 300 --num-iterations 15 --random-seed 42
 
 
+# Generate synthetic groups
+datasets=(
+    ./datasets/kgrec/music_ratings.csv.gz
+    ./datasets/movie_lens_small/ratings.csv.gz
+    ./datasets/kgrec/music_ratings.csv.gz
+    ./datasets/netflix/ratings.csv.gz
+)
+
+for dataset in "${datasets[@]}"
+do
+  poetry run python ./create_groups/create_random_groups.py --group-sizes 4,6,8 --num-groups-to-generate 1000 --input $dataset
+  poetry run python ./create_groups/create_topk_groups.py --group-sizes 4,6,8 --num-groups-to-generate 1000 --num-of-candidates 1000 --input $dataset
+  poetry run python ./create_groups/create_prs_groups.py --scaling-exponent 1 --group-sizes 4,6,8 --num-groups-to-generate 1000 --num-of-candidates 1000 --input $dataset
+  poetry run python ./create_groups/create_prs_groups.py --scaling-exponent 4 --group-sizes 4,6,8 --num-groups-to-generate 1000 --num-of-candidates 1000 --input $dataset
+done
