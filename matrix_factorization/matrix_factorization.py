@@ -1,3 +1,7 @@
+import sys
+from os import path
+sys.path.append(path.join(sys.path[0], '..'))
+
 import argparse
 import os
 from pathlib import Path
@@ -306,14 +310,14 @@ DESCRIPTION = 'Alternating Least Squares (ALS) matrix factorization. Learns late
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument('--rating-type', choices={"implicit", "explicit"}, required=True, help='')
-    parser.add_argument('--input', default='./datasets/kgrec/music_ratings.csv.gz', help='The dataset to use, needs to be csv dataframe with columns "user_id", "item_id" and optionally "rating".')
-    parser.add_argument('--output-dir', default=None, help='The directory where the resulting matricies will be saved. Default is "mf" dir under the input data directory.')
-    parser.add_argument('--num-factors', type=int, default=None, help='The number of latent factors to use.')
+    parser.add_argument('--input', required=True, help='The dataset to use, needs to be csv dataframe with columns "user_id", "item_id" and optionally "rating".')
+    parser.add_argument('--output-dir', type=Optional[str], default=None, help='The directory where the resulting matricies will be saved. Default is "mf" dir under the input data directory.')
+    parser.add_argument('--num-factors', type=int, required=True, help='The number of latent factors to use.')
     parser.add_argument('--num-iterations', type=int, default=15, help='The number of iterations to use.')
     parser.add_argument('--regularization', type=float, default=0.1, help='The regularization parameter.')
     parser.add_argument('--convergence-threshold', type=float, default=0.001, help='The convergence threshold. Only for explicit algo.')
     parser.add_argument('--num-threads', default=None, help='The number of threads to use. Default is system cores - 2')
-    parser.add_argument('--random-seed', default=42, help='Random seed that will be used for the user and item factor matrices')
+    parser.add_argument('--random-seed', type=int, default=42, help='Random seed that will be used for the user and item factor matrices')
 
     args = parser.parse_args()
     print(args)

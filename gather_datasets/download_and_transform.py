@@ -1,4 +1,7 @@
+import sys
 from os import path
+sys.path.append(path.join(sys.path[0], '..'))
+
 
 from datasets.lastfm import LastFM
 from datasets.kgrec import KGRec

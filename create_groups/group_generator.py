@@ -13,6 +13,6 @@ class GroupGenerator(ABC):
 
         file_name = f'{group_type}_{group_size}'
         if other_params:
-            file_name += '_' + '_'.join([f'{key}:{value}' for key, value in other_params.items()])
+            file_name += '_' + '_'.join([f'{key}={value}' for key, value in other_params.items()])
 
         data_frame.to_csv(os.path.join(output_dir, f'{file_name}.csv'), index=False, header=False)

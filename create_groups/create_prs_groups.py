@@ -1,3 +1,9 @@
+import sys
+from os import path
+sys.path.append(path.join(sys.path[0], '..'))
+
+import os
+
 import argparse
 import os
 from typing import Tuple
@@ -12,45 +18,6 @@ from create_groups.similarity_sampler_tools import SimilaritySamplerTools
 import scipy.stats as ss
 
 DESCRIPTION = 'Generates groups for a dataset based on PRS (probability respecting similarity) selection.'
-
-
-# class SampledTopKGroupGenerator(GroupGenerator):
-#     def generate_groups(
-#             self,
-#             dataset: Dataset,
-#             output_dir: str,
-#             group_size: int,
-#             num_of_groups_to_generate: int,
-#             number_of_candidates: int = 1000,
-#     ) -> pd.DataFrame:
-#         print(f"Generating top-k groups")
-#         sim_sampler_tools = SimilaritySamplerTools(dataset)
-#         groups = []
-#         for _ in tqdm(range(num_of_groups_to_generate), total=num_of_groups_to_generate):
-#             # draw one more which will become the pivot
-#             candidates = sim_sampler_tools.draw_unique_candidates(number_of_candidates + 1)
-#             pivot, candidates = candidates[0], candidates[1:]
-#             # calculate the similarity of the pivot to all the candidates
-#             candidates_similarities = sim_sampler_tools.calculate_similarity_of_candidates(pivot, candidates)
-#             # sort the candidates by similarity
-#             candidates_similarities = sorted(candidates_similarities, key=lambda x: x[1], reverse=True)
-#             # take the top k candidates
-#             top_k_candidates = [x[0] for x in candidates_similarities[:group_size - 1]]
-#             group = [pivot] + top_k_candidates
-#             groups.append(group)
-#
-#         df = pd.DataFrame(groups)
-#         other_params = {'number_of_candidates': number_of_candidates}
-#         self.save_group_df(
-#             df,
-#             output_dir=output_dir,
-#             group_type='topk',
-#             group_size=group_size,
-#             other_params=other_params
-#         )
-#
-#         return df
-
 
 class PRSGroupGenerator(GroupGenerator):
     def __init__(self, cache_dir: str):
