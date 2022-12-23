@@ -1,5 +1,6 @@
 import sys
 from os import path
+
 sys.path.append(path.join(sys.path[0], '..'))
 
 import os
@@ -14,7 +15,6 @@ from typing import List
 
 import numpy as np
 from tqdm import tqdm
-
 
 from experiments.algorithms.GFAR import GFAR
 from experiments.algorithms.XPO import XPO
@@ -56,11 +56,12 @@ def parse_args():
 
     if args.output_dir is None:
         parent_path_groups = Path(args.input_groups_directory).parent
-        args.output_dir = os.path.join(parent_path_groups, 'experiment_results')
+        args.output_dir = os.path.join(parent_path_groups, 'experiment_results/standard')
 
     print(args)
 
     return args
+
 
 def process_single_group(group_members):
     items = get_items_for_users(group_members, i_features=i_features, u_features=u_features)
@@ -99,8 +100,9 @@ def process_single_group(group_members):
 if __name__ == '__main__':
     args = parse_args()
 
-    # load groups
+    u_features, i_features = load_mf_matrices(args.input_mf)
 
+    # load groups
     for group_file in os.listdir(args.input_groups_directory):
         group_file = os.path.join(args.input_groups_directory, group_file)
         print(group_file)
@@ -113,11 +115,9 @@ if __name__ == '__main__':
         # concatenate first 5 columns to array of ints
         groups = groups.iloc[:, :group_size].values
 
-        u_features, i_features = load_mf_matrices(args.input_mf)
-
         results = defaultdict(list)
 
-        for group_members in tqdm(groups[0:10]):
+        for group_members in tqdm(groups):
             process_single_group(group_members)
 
         group_name = os.path.basename(group_file).split('.')[0]
@@ -125,5 +125,5 @@ if __name__ == '__main__':
         output_dir = os.path.join(args.output_dir, group_name)
         for alg_name, data in results.items():
             os.makedirs(output_dir, exist_ok=True)
-            file_name = os.path.join(output_dir, f'{alg_name}.npy',)
+            file_name = os.path.join(output_dir, f'{alg_name}.npy', )
             np.save(file_name, data)

@@ -25,6 +25,6 @@ if __name__ == '__main__':
     os.makedirs(args.output_dir, exist_ok=True)
 
     for g_size in args.group_sizes_list:
-        filename = 'group_weights_' + str(g_size)
+        filename = f'group_weights_{str(g_size)}.csv'
         file = os.path.join(args.output_dir, filename)
         generate(g_size, 1000, file)

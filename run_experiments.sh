@@ -2,9 +2,9 @@ function green {
     printf "\033[92m$@\033[0m\n"
 }
 
-#green "Running dataset downloader and transformer for movie_lens"
-#poetry run python gather_datasets/download_and_transform.py --datasets movie_lens
-
+# -------------------------------------------------------
+# gather datasets
+# -------------------------------------------------------
 green "Running dataset downloader and transformer for movie_lens_small"
 poetry run python gather_datasets/download_and_transform.py --datasets movie_lens_small
 
@@ -22,7 +22,9 @@ poetry run python gather_datasets/download_and_transform.py --datasets spotify
 
 
 
+# -------------------------------------------------------
 # Get the ground truths
+# -------------------------------------------------------
 green "Running matrix factorization for kgrec"
 poetry run python ./matrix_factorization/matrix_factorization.py --rating-type implicit --input ./datasets/kgrec/music_ratings.csv.gz --num-factors 50 --num-iterations 15 --random-seed 42
 
@@ -36,14 +38,16 @@ green "Running matrix factorization for Spotify"
 poetry run python ./matrix_factorization/matrix_factorization.py --rating-type implicit --input ./datasets/spotify/ratings.csv.gz --num-factors 300 --num-iterations 15 --random-seed 42
 
 
+
+# -------------------------------------------------------
 # Generate synthetic groups
+# -------------------------------------------------------
 datasets=(
     ./datasets/kgrec/music_ratings.csv.gz
     ./datasets/movie_lens_small/ratings.csv.gz
-    ./datasets/kgrec/music_ratings.csv.gz
+    ./datasets/spotify/ratings.csv.gz
     ./datasets/netflix/ratings.csv.gz
 )
-
 for dataset in "${datasets[@]}"
 do
   poetry run python ./create_groups/create_random_groups.py --group-sizes 4,6,8 --num-groups-to-generate 1000 --input $dataset
@@ -57,24 +61,42 @@ done
 datasets=(
    ./datasets/kgrec
    ./datasets/movie_lens_small
-   ./datasets/kgrec
+   ./datasets/spotify
    ./datasets/netflix
 )
 
 
-# single run experiments
+# -------------------------------------------------------
+# run standard experiments
+# -------------------------------------------------------
 # iterate through all files in the ./datasets/groups
 for dataset in "${datasets[@]}"
 do
   # get all files in the directory $dataset/groups
   echo 'Running group recommender for' $file
-  poetry run python ./experiments/run_algorithms.py --input-groups-directory $dataset/groups --input_mf $datasets/mf/
+  poetry run python experiments/run_algorithms.py --input-groups-directory $dataset/groups --input-mf $datasets/mf/
 done
 
+# -------------------------------------------------------
 # create group weights for the weighted experiments
+# -------------------------------------------------------
+
 for dataset in "${datasets[@]}"
 do
   # get all files in the directory $dataset/groups
   echo 'Creating group weights for' $dataset
-  poetry run python ./create_groups/create_group_weights.py --output-dir $dataset/groups/weights
+  poetry run python create_groups/create_group_weights.py --output-dir $dataset/groups/weights
+done
+
+
+# -------------------------------------------------------
+# run weighted experiments
+# -------------------------------------------------------
+
+# iterate through all files in the ./datasets/groups
+for dataset in "${datasets[@]}"
+do
+  # get all files in the directory $dataset/groups
+  echo 'Running group recommender for' $file
+  poetry run python experiments/run_weighted_algorithms.py --input-groups-directory $dataset/groups --input-mf $datasets/mf/
 done

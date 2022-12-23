@@ -12,12 +12,15 @@ class GreedyAlgorithms:
         return top_candidates_idx
 
     @staticmethod
-    def avg_algorithm(group_items, top_n: int, n_candidates: int):
+    def avg_algorithm(group_items, top_n: int, n_candidates: int, member_weights=None):
         """
         Returns items ordered by average rating.
         """
         top_candidates_idx = GreedyAlgorithms.get_top_n_idx(group_items, n_candidates)
         candidate_group_items = group_items[top_candidates_idx, :]  # this is the first id mapping (to go back to original, index by top_candidates_idx)
+
+        if member_weights is not None:
+            candidate_group_items *= member_weights
 
         means = candidate_group_items.mean(axis=1)
         top_n_idx = select_top_n_idx(means, top_n)

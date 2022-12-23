@@ -11,7 +11,7 @@ class EPFuzzDHondt:
         group_size = group_items.shape[1]
         # print(group_size)
 
-        if not member_weights:
+        if member_weights is None:
             member_weights = [1. / group_size] * group_size
         member_weights = np.array(member_weights)
 
