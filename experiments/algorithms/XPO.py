@@ -63,14 +63,14 @@ class XPO:
 
         # select candidates by pareto level, cut off at pareto_level = top_n
         if algo_type == 'NPO':
-            final_candidates = pareto_levels_pd[pareto_levels_pd['pareto_level'] <= top_n]['item_id'].explode().to_numpy()
+            final_candidates = pareto_levels_pd[pareto_levels_pd['pareto_level'] <= top_n + 1]['item_id'].explode().to_numpy()
 
         # select candidates starting at pareto level 1 and cut off when the number of candidates is equal or greater than top_n
         if algo_type == 'XPO':
             # add cumulative count of items to the grouped dataframe
             pareto_levels_grouped = pareto_levels_pd.groupby('pareto_level').agg(level=('pareto_level', 'first'), items=('item_id', 'unique'), items_count=('item_id', 'count'))
             pareto_levels_grouped['cum_items_count'] = pareto_levels_grouped['items_count'].cumsum()
-            idx_of_first_larger_than_top_k = (pareto_levels_grouped['cum_items_count'] > top_n).idxmax()
+            idx_of_first_larger_than_top_k = (pareto_levels_grouped['cum_items_count'] > top_n + 1).idxmax()
             # select all pareto levels that will get us top_n items and explode the lists to get the top_n items
             final_candidates = pareto_levels_grouped.iloc[0:idx_of_first_larger_than_top_k]['items'].explode().to_numpy(dtype=np.int64)
 

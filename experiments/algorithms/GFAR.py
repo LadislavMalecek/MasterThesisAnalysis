@@ -29,7 +29,7 @@ class GFAR:
             marginal_gain = p_relevant * prob_selected_not_relevant
             item_marginal_gain = marginal_gain.sum(axis=1)
             # select the item with the highest marginal gain
-            item_id = select_top_n_idx(item_marginal_gain, 1, exclude_idx=selected_items)[0]
+            item_id = list(select_top_n_idx(item_marginal_gain, 1, exclude_idx=selected_items))[0]
             selected_items.append(item_id)
 
             # update the probability of selected items not being relevant

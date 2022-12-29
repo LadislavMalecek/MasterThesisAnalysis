@@ -1,4 +1,5 @@
 import math
+from typing import List
 
 import numpy as np
 from experiments.algorithms.commons import select_top_n_idx
@@ -6,17 +7,17 @@ from experiments.algorithms.commons import select_top_n_idx
 
 class GreedyAlgorithms:
     @staticmethod
-    def get_top_n_idx(group_items, n_candidates):
-        top_candidates_ids_per_member = np.apply_along_axis(lambda u_items: select_top_n_idx(u_items, n_candidates, sort=False), 0, group_items)
+    def get_top_n_idx(group_items, n_candidates, exclude_idx: List[int] = []):
+        top_candidates_ids_per_member = np.apply_along_axis(lambda u_items: select_top_n_idx(u_items, n_candidates, sort=False, exclude_idx=exclude_idx), 0, group_items)
         top_candidates_idx = np.array(sorted(set(top_candidates_ids_per_member.flatten())))
         return top_candidates_idx
 
     @staticmethod
-    def avg_algorithm(group_items, top_n: int, n_candidates: int, member_weights=None):
+    def avg_algorithm(group_items, top_n: int, n_candidates: int, member_weights=None, exclude_idx: List[int] = []):
         """
         Returns items ordered by average rating.
         """
-        top_candidates_idx = GreedyAlgorithms.get_top_n_idx(group_items, n_candidates)
+        top_candidates_idx = GreedyAlgorithms.get_top_n_idx(group_items, n_candidates, exclude_idx=exclude_idx)
         candidate_group_items = group_items[top_candidates_idx, :]  # this is the first id mapping (to go back to original, index by top_candidates_idx)
 
         if member_weights is not None:

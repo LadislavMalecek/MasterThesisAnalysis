@@ -7,7 +7,7 @@ from experiments.algorithms.commons import select_top_n_idx
 
 class EPFuzzDHondt:
     @staticmethod
-    def run(group_items: np.array, top_n: int, n_candidates: int = None, member_weights: List[float] = None) -> np.array:
+    def run(group_items: np.array, top_n: int, n_candidates: int = None, member_weights: List[float] = None, exclude_idx: List[int] = []) -> np.array:
         group_size = group_items.shape[1]
         # print(group_size)
 
@@ -18,7 +18,7 @@ class EPFuzzDHondt:
         # print('Member weights: ', member_weights)
         # print('Member weights shape: ', member_weights.shape)
 
-        top_candidates_ids_per_member = np.apply_along_axis(lambda u_items: select_top_n_idx(u_items, n_candidates), 0, group_items)
+        top_candidates_ids_per_member = np.apply_along_axis(lambda u_items: select_top_n_idx(u_items, n_candidates, exclude_idx=exclude_idx), 0, group_items)
         # these are the original items ids
         top_candidates_idx = np.array(sorted(set(top_candidates_ids_per_member.flatten())))
 

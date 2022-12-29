@@ -7,14 +7,14 @@ from experiments.algorithms.commons import select_top_n_idx
 
 class DHondtDirectOptimize:
     @staticmethod
-    def run(group_items, top_n, n_candidates=1000, member_weights=None) -> List[int]:
+    def run(group_items, top_n, n_candidates=1000, member_weights=None, exclude_idx: List[int] = []) -> List[int]:
         group_size = group_items.shape[1]
         if member_weights is None:
             # will be normalized to 1 in the next step anyway, we can skip it here
             member_weights = [1] * group_size
         starting_voting_support = np.array(member_weights) / sum(member_weights)
 
-        top_candidates_ids_per_member = np.apply_along_axis(lambda u_items: select_top_n_idx(u_items, n_candidates), 0, group_items)
+        top_candidates_ids_per_member = np.apply_along_axis(lambda u_items: select_top_n_idx(u_items, n_candidates, exclude_idx=exclude_idx), 0, group_items)
         # these are the original items ids
         top_candidates_idx = np.array(sorted(set(top_candidates_ids_per_member.flatten())))
         candidate_group_items = group_items[top_candidates_idx, :] # this is the first id mapping (to go back to original, index by top_candidates_idx)
