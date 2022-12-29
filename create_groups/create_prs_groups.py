@@ -43,8 +43,8 @@ class PRSGroupGenerator(GroupGenerator):
         print('exp_params', exp_params)
         return exp_params
 
-    def _get_datasets_inter_quartile_range(self, similarity_sampler_tools):
-        similarity_samples = similarity_sampler_tools.get_similarity_sampling(num_of_samples=10_000, cache_dir=self.cache_dir)
+    def _get_datasets_inter_quartile_range(self, similarity_sampler_tools, num_of_samples=10_000):
+        similarity_samples = similarity_sampler_tools.get_similarity_sampling(num_of_samples=num_of_samples, cache_dir=self.cache_dir)
         similarity_samples.sort()
 
         first_quartile = similarity_samples[int(len(similarity_samples) * 0.25)]
@@ -64,20 +64,20 @@ class PRSGroupGenerator(GroupGenerator):
             scaling_exponent: float,
             scaling_width: float = None,
             number_of_candidates: int = 1000,
+            number_of_samples: int = 10_000,
     ) -> pd.DataFrame:
 
         similarity_sampler_tools = SimilaritySamplerTools(dataset)
         exp_modeled_params = self._get_datasets_modeled_parameters(similarity_sampler_tools)
 
         if scaling_width is None:
-            inter_quartile_range = self._get_datasets_inter_quartile_range(similarity_sampler_tools)
+            inter_quartile_range = self._get_datasets_inter_quartile_range(similarity_sampler_tools, number_of_samples)
         else:
             inter_quartile_range = scaling_width
 
         print(f"Generating weighted groups")
-        max_user_id = dataset.dataset_df['user_id'].max()
+        # max_user_id = dataset.dataset_df['user_id'].max()
         groups_weighted = []
-        groups_top_k = []
         for _ in tqdm(range(num_of_groups_to_generate), total=num_of_groups_to_generate):
             # draw one more which will become the pivot
             candidates = similarity_sampler_tools.draw_unique_candidates(number_of_candidates + 1)
@@ -117,6 +117,7 @@ class PRSGroupGenerator(GroupGenerator):
 
         df_weighted = pd.DataFrame(groups_weighted)
         other_params = {'se': scaling_exponent, 'noc': number_of_candidates}
+
         self.save_group_df(
             df_weighted,
             group_type='prs',
@@ -135,6 +136,7 @@ def parse_args():
     parser.add_argument('--num-groups-to-generate', default=1000, type=int, help='Number of groups to generate.')
     parser.add_argument('--num-of-candidates', default=1000, type=int, help='Number of candidates from all users that will be drawn randomly from which to select the best k ones.')
     parser.add_argument('--scaling-exponent', default=1, type=int, help='Multiplying factor of the weighing for member sampling.')
+    parser.add_argument('--num-of-samples', default=10_000, type=int, help='Number of samples to draw from the dataset to calculate the similarity distribution.')
 
     args = parser.parse_args()
 
@@ -160,4 +162,5 @@ if __name__ == '__main__':
             group_size=group_size,
             num_of_groups_to_generate=args.num_groups_to_generate,
             scaling_exponent=args.scaling_exponent,
+            number_of_samples=args.num_of_samples,
         )
