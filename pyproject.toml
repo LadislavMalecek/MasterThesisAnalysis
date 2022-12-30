@@ -9,7 +9,6 @@ python = "=3.9.13"
 pandas = "^1.4"
 matplotlib = "^3.5"
 numpy = "^1.22"
-ipykernel = "^6.13"
 requests = "^2.27"
 tqdm = "^4.64"
 seaborn = "^0.11"
@@ -21,9 +20,18 @@ implicit = "^0.6.1"
 
 
 [tool.poetry.dev-dependencies]
-notebook = "^6.4.11"
-jupyter = "^1.0.0"
+notebook = { version="^6.4.11", optional = true }
+jupyter = { version="^1.0.0", optional = true }
+ipykernel = { version="^6.13", optional = true }
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.19.4"
+notebook = "^6.5.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.extras]
+all = ["notebook", "jupyter", "ipykernel"]
