@@ -97,4 +97,5 @@ do
   echo 'Running group recommenders for' $file
   poetry run python experiments/run_uniform_algorithms.py --input-groups-directory $dataset/groups --input-mf $dataset/mf/
   poetry run python experiments/run_weighted_algorithms.py --input-groups-directory $dataset/groups --input-mf $dataset/mf/
+  poetry run python experiments/run_longterm_algorithms.py --input-groups-directory $dataset/groups --input-mf $dataset/mf/
 done

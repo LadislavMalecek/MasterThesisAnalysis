@@ -32,7 +32,11 @@ def get_items_for_user(user_id, u_features, i_features):
 
 
 def get_items_for_users(users_id: List, i_features, u_features):
-    items_ratings = i_features @ u_features.T[:, users_id]
+    items_ratings = None
+    if i_features.shape[1] > i_features.shape[0]:
+        items_ratings = i_features.T @ u_features[:, users_id]
+    else:
+        items_ratings = i_features @ u_features.T[:, users_id]
     # items_ratings = np.minimum(5, np.maximum(0, i_features.T @ u_features[:, users_id]))
     return items_ratings
 
@@ -56,7 +60,7 @@ def parse_args():
 
     if args.output_dir is None:
         parent_path_groups = Path(args.input_groups_directory).parent
-        args.output_dir = os.path.join(parent_path_groups, 'experiment_results/standard')
+        args.output_dir = os.path.join(parent_path_groups, 'experiment_results/uniform')
 
     print(args)
 
@@ -65,7 +69,7 @@ def parse_args():
 
 def process_single_group(group_members):
     items = get_items_for_users(group_members, i_features=i_features, u_features=u_features)
-
+    
     # avg_algorithm
     top_n_items_avg = GreedyAlgorithms.avg_algorithm(items, top_n=10, n_candidates=1000)
     results['avg'].append(top_n_items_avg)
@@ -104,6 +108,10 @@ if __name__ == '__main__':
 
     # load groups
     for group_file in os.listdir(args.input_groups_directory):
+        if group_file.startswith('random') or group_file.startswith('topk'):
+            print(f'Skipping {group_file}')
+            continue
+
         group_file = os.path.join(args.input_groups_directory, group_file)
         print(group_file)
         if not group_file.endswith('.csv'):
