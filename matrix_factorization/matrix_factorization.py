@@ -248,8 +248,8 @@ def main_explicit(
 
     print('Saving user and item features in numpy datafile (.npy) to {0}'.format(output_dir))
     Path.mkdir(Path(output_dir), exist_ok=True)
-    np.save(os.path.join(output_dir, 'U_features.npy'), model.u_features)
-    np.save(os.path.join(output_dir, 'I_features.npy'), model.i_features)
+    np.save(os.path.join(output_dir, 'U_features.npy'), model.u_features.T)
+    np.save(os.path.join(output_dir, 'I_features.npy'), model.i_features.T)
 
     print('Saving training and testing traces in csv file to {0}'.format(output_dir))
     trace_df = pd.DataFrame({'training': model.training_trace, 'testing': model.testing_trace})
