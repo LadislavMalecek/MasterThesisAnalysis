@@ -14,7 +14,7 @@ class MovieLensSize(Enum):
 
 class MovieLens(Dataset):
 
-    def __init__(self, size=MovieLensSize.hundred_k):
+    def __init__(self, size: MovieLensSize):
         self.size = size
 
     def download_dataset(self, data_dir):

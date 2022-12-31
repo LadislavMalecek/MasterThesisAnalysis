@@ -18,7 +18,7 @@ from experiments.algorithms.exactly_proportional_fuzz_dhondt import EPFuzzDHondt
 
 from experiments.algorithms.greedy_algorithms import GreedyAlgorithms
 
-from experiments.run_algorithms import load_mf_matrices, get_items_for_users
+from experiments.run_uniform_algorithms import load_mf_matrices, get_items_for_users
 
 
 def load_weights(input_groups_directory: str, group_size: int):

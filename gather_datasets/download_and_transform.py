@@ -24,7 +24,7 @@ DESCRIPTION = 'Program to download and process common recommendation systems dat
 
 
 DATASET_PROCESSORS = {
-    'movie_lens': lambda: MovieLens(),
+    'movie_lens': lambda: MovieLens(MovieLensSize.twenty_five_million),
     'movie_lens_small': lambda: MovieLens(MovieLensSize.one_million),
     'netflix': lambda: Netflix(),
     'lastfm': lambda: LastFM(),
