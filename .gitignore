@@ -1,6 +1,15 @@
-/datasets/*
+/datasets/downloads/*
+/datasets/*/evaluation_results/*.tex
+datasets/*/mf/trace.csv
+datasets/*/*.csv
+datasets/*/*.csv.gz
+datasets/*/groups/similarity_sampling_cache/*
 **/dfs/*
 **/npz/*
+
+datasets/spotify/mf/*_features.npy
+
+.vscode/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
