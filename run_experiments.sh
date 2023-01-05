@@ -5,17 +5,20 @@ function green {
 # -------------------------------------------------------
 # gather datasets
 # -------------------------------------------------------
+green "Running dataset downloader and transformer for kgrec"
+poetry run python gather_datasets/download_and_transform.py --datasets kgrec
+
+green "Running dataset downloader and transformer for movie_lens"
+poetry run python gather_datasets/download_and_transform.py --datasets movie_lens
+
 green "Running dataset downloader and transformer for movie_lens_small"
 poetry run python gather_datasets/download_and_transform.py --datasets movie_lens_small
 
 green "Running dataset downloader and transformer for netflix"
 poetry run python gather_datasets/download_and_transform.py --datasets netflix
 
-green "Running dataset downloader and transformer for lastfm"
-poetry run python gather_datasets/download_and_transform.py --datasets lastfm
-
-green "Running dataset downloader and transformer for kgrec"
-poetry run python gather_datasets/download_and_transform.py --datasets kgrec
+# green "Running dataset downloader and transformer for lastfm"
+# poetry run python gather_datasets/download_and_transform.py --datasets lastfm
 
 green "Running dataset downloader and transformer for spotify"
 poetry run python gather_datasets/download_and_transform.py --datasets spotify
@@ -34,15 +37,15 @@ poetry run python ./matrix_factorization/matrix_factorization.py --rating-type e
 green "Running matrix factorization for movie_lens"
 poetry run python ./matrix_factorization/matrix_factorization.py --rating-type explicit --input ./datasets/movie_lens/ratings.csv.gz --num-factors 200 --num-iterations 15 --random-seed 42
 
-green "Running matrix factorization for Netflix"
+green "Running matrix factorization for netflix"
 poetry run python ./matrix_factorization/matrix_factorization.py --rating-type explicit --input ./datasets/netflix/ratings.csv.gz --num-factors 300 --num-iterations 15 --random-seed 42
 
-green "Running matrix factorization for Spotify"
+green "Running matrix factorization for spotify"
 poetry run python ./matrix_factorization/matrix_factorization.py --rating-type implicit --input ./datasets/spotify/ratings.csv.gz --num-factors 300 --num-iterations 15 --random-seed 42
 
 
 
--------------------------------------------------------
+#-------------------------------------------------------
 # Generate synthetic groups
 # -------------------------------------------------------
 datasets=(
@@ -95,7 +98,7 @@ for dataset in "${datasets[@]}"
 do
   # get all files in the directory $dataset/groups
   echo 'Running group recommenders for' $file
-  poetry run python experiments/run_uniform_algorithms.py --input-groups-directory $dataset/groups --input-mf $dataset/mf/
-  poetry run python experiments/run_weighted_algorithms.py --input-groups-directory $dataset/groups --input-mf $dataset/mf/
-  poetry run python experiments/run_longterm_algorithms.py --input-groups-directory $dataset/groups --input-mf $dataset/mf/
+  poetry run python experiments/run_uniform_algorithms.py --group-sizes 2,3,6,8 --input-groups-directory $dataset/groups --input-mf $dataset/mf/
+  poetry run python experiments/run_weighted_algorithms.py --group-sizes 2,3,6,8 --input-groups-directory $dataset/groups --input-mf $dataset/mf/
+  poetry run python experiments/run_longterm_algorithms.py --group-sizes 2,3,6,8 --input-groups-directory $dataset/groups --input-mf $dataset/mf/
 done

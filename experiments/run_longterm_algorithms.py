@@ -33,11 +33,16 @@ def parse_args():
     parser.add_argument('--input-mf', default='./datasets/kgrec/mf/', help='The dataset to use, needs to be csv dataframe with columns "user_id", "item_id" and optionally "rating".')
     parser.add_argument('--output-dir', default=None, help='The directory where the resulting matrices will be saved. Default is "groups" dir under the input data directory.')
     parser.add_argument('--num-longterm-runs', default=5, type=int, help='The number of longterm runs to perform.')
+    parser.add_argument('--group-sizes', default='2,3,4,6,8', type=str, help='Sizes of groups, numbers divided by a comma. Ex.: 5,6,7,8')
+
     args = parser.parse_args()
 
     if args.output_dir is None:
         parent_path_groups = Path(args.input_groups_directory).parent
         args.output_dir = os.path.join(parent_path_groups, 'experiment_results/longterm')
+
+    args.group_sizes_set = set(map(lambda x: int(str.strip(x)), args.group_sizes.split(',')))
+    
 
     print(args)
 
@@ -135,6 +140,9 @@ if __name__ == '__main__':
 
         groups = pd.read_csv(group_file, header=None)
         group_size = len(groups.columns)
+
+        if group_size not in args.group_sizes_set:
+            continue
         
         # concatenate first 5 columns to array of ints
         groups = groups.iloc[:, :group_size].values
