@@ -98,7 +98,16 @@ for dataset in "${datasets[@]}"
 do
   # get all files in the directory $dataset/groups
   echo 'Running group recommenders for' $file
-  poetry run python experiments/run_uniform_algorithms.py --group-sizes 2,3,6,8 --input-groups-directory $dataset/groups --input-mf $dataset/mf/
-  poetry run python experiments/run_weighted_algorithms.py --group-sizes 2,3,6,8 --input-groups-directory $dataset/groups --input-mf $dataset/mf/
-  poetry run python experiments/run_longterm_algorithms.py --group-sizes 2,3,6,8 --input-groups-directory $dataset/groups --input-mf $dataset/mf/
+  poetry run python experiments/run_uniform_algorithms.py --group-sizes 2,3,4,6,8 --input-groups-directory $dataset/groups --input-mf $dataset/mf/
+  poetry run python experiments/run_weighted_algorithms.py --group-sizes 2,3,4,6,8 --input-groups-directory $dataset/groups --input-mf $dataset/mf/
+  poetry run python experiments/run_longterm_algorithms.py --group-sizes 2,3,4,6,8 --input-groups-directory $dataset/groups --input-mf $dataset/mf/
 done
+
+
+# -------------------------------------------------------
+# run evaluation
+# -------------------------------------------------------
+echo 'To run the evaluation, please run the following notebooks:'
+echo '1. ./evaluation/evaluation_uniform.ipynb'
+echo '2. ./evaluation/evaluation_weighted.ipynb'
+echo '3. ./evaluation/evaluation_longterm.ipynb'
