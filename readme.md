@@ -28,9 +28,6 @@ Repository structure of the most important files and folders:
 │   ├── create_random_groups.py
 │   └── create_topk_groups.py
 │
-├── gather_datasets
-│   └── download_and_transform.py
-│
 ├── evaluation
 │   ├── evaluation_longterm.ipynb
 │   ├── evaluation_uniform.ipynb
@@ -40,6 +37,9 @@ Repository structure of the most important files and folders:
 │   ├── run_longterm_algorithms.py
 │   ├── run_uniform_algorithms.py
 │   └── run_weighted_algorithms.py
+│
+├── gather_datasets
+│   └── download_and_transform.py
 │
 ├── matrix_factorization
 │   └── matrix_factorization.py
